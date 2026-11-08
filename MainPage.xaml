@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UDVTripSurvey.MainPage"
+             x:Name="_TripPage_"
+             Title="Планирование поездки"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F7F8F6">
+    <ScrollView x:Name="_TripScroll_">
+        <VerticalStackLayout x:Name="_PageLayout_" Padding="18,24,18,36"
+                             Spacing="18" MaximumWidthRequest="680"
+                             HorizontalOptions="Fill">
+            <Grid x:Name="_HeaderGrid_" RowDefinitions="Auto,Auto" ColumnDefinitions="*,58"
+                  ColumnSpacing="12" RowSpacing="6" Margin="0,0,0,8">
+                <Label x:Name="_PageTitle_" Grid.Row="0" Grid.Column="0"
+                       Text="План поездки" FontSize="26" FontAttributes="Bold"
+                       TextColor="#21372D"/>
+                <Label x:Name="_PageIntro_" Grid.Row="1" Grid.Column="0"
+                       Text="Собери пожелания компании перед совместным путешествием."
+                       FontSize="13" FontAttributes="None" TextColor="#5D7066"/>
+                <Image x:Name="_TripImage_" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                       Source="trip_mark.png" Aspect="AspectFit" HeightRequest="54"
+                       WidthRequest="54" VerticalOptions="Center"/>
+            </Grid>
+
+            <Border x:Name="_MainCard_" BackgroundColor="#FFFFFF" Stroke="#DFE8E0"
+                    StrokeThickness="1" StrokeShape="RoundRectangle 16" Padding="18">
+                <VerticalStackLayout x:Name="_FormLayout_" Spacing="16">
+                    <Label x:Name="_ContactsSection_" Text="Кто едет" FontSize="18"
+                           FontAttributes="Bold" TextColor="#21372D"/>
+                    <Grid x:Name="_ContactsGrid_" RowDefinitions="Auto,Auto,Auto,Auto"
+                          ColumnDefinitions="*" RowSpacing="7">
+                        <Label x:Name="_NameTitle_" Grid.Row="0" Grid.Column="0"
+                               Text="Имя организатора *" FontSize="14" FontAttributes="Bold"
+                               TextColor="#294337"/>
+                        <Entry x:Name="_OrganizerEntry_" Grid.Row="1" Grid.Column="0"
+                               Placeholder="Например, Руслан" Keyboard="Text" MaxLength="60"
+                               TextColor="#21372D" PlaceholderColor="#8A9A90"
+                               BackgroundColor="#F4F7F4" FontSize="15" HeightRequest="46"
+                               TextChanged="OnRequiredChanged"/>
+                        <Label x:Name="_CountTitle_" Grid.Row="2" Grid.Column="0"
+                               Text="Количество участников *" FontSize="14" FontAttributes="Bold"
+                               TextColor="#294337" Margin="0,8,0,0"/>
+                        <Entry x:Name="_PeopleEntry_" Grid.Row="3" Grid.Column="0"
+                               Placeholder="От 1 до 30 человек" Keyboard="Numeric" MaxLength="2"
+                               TextColor="#21372D" PlaceholderColor="#8A9A90"
+                               BackgroundColor="#F4F7F4" FontSize="15" HeightRequest="46"
+                               TextChanged="OnRequiredChanged"/>
+                    </Grid>
+
+                    <BoxView x:Name="_LineOne_" HeightRequest="1" Color="#E3EAE4"/>
+                    <Label x:Name="_FormatSection_" Text="Формат и бюджет"
+                           FontSize="18" FontAttributes="Bold" TextColor="#21372D"/>
+                    <VerticalStackLayout x:Name="_FormatGroup_" Spacing="5">
+                        <Label x:Name="_FormatTitle_" Text="Какой отдых предпочитаете?"
+                               FontSize="14" FontAttributes="Bold" TextColor="#294337"/>
+                        <Picker x:Name="_FormatPicker_" Title="Выбери формат поездки"
+                                TitleColor="#8A9A90" TextColor="#21372D"
+                                BackgroundColor="#F4F7F4" FontSize="15" HeightRequest="46"
+                                SelectedIndex="-1" SelectedIndexChanged="OnFormatChanged">
+                            <Picker.Items>
+                                <x:String>Поездка в горы</x:String>
+                                <x:String>Море и пляж</x:String>
+                                <x:String>Городской уикенд</x:String>
+                                <x:String>Поход с палатками</x:String>
+                                <x:String>Загородный отдых</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout x:Name="_BudgetGroup_" Spacing="5">
+                        <Label x:Name="_BudgetTitle_" Text="Бюджет на человека"
+                               FontSize="14" FontAttributes="Bold" TextColor="#294337"/>
+                        <RadioButton x:Name="_BudgetLow_" Content="До 15 000 ₽" GroupName="TravelBudget"
+                                     Value="low" IsChecked="True" TextColor="#21372D" FontSize="14"
+                                     HeightRequest="36" CheckedChanged="OnSelectionChanged"/>
+                        <RadioButton x:Name="_BudgetMiddle_" Content="15-30 тысяч ₽" GroupName="TravelBudget"
+                                     Value="middle" TextColor="#21372D" FontSize="14"
+                                     HeightRequest="36" CheckedChanged="OnSelectionChanged"/>
+                        <RadioButton x:Name="_BudgetHigh_" Content="30-50 тысяч ₽" GroupName="TravelBudget"
+                                     Value="high" TextColor="#21372D" FontSize="14"
+                                     HeightRequest="36" CheckedChanged="OnSelectionChanged"/>
+                        <RadioButton x:Name="_BudgetFlexible_" Content="Больше 50 000 ₽" GroupName="TravelBudget"
+                                     Value="flexible" TextColor="#21372D" FontSize="14"
+                                     HeightRequest="36" CheckedChanged="OnSelectionChanged"/>
+                    </VerticalStackLayout>
+
+                    <BoxView x:Name="_LineTwo_" HeightRequest="1" Color="#E3EAE4"/>
+                    <Label x:Name="_DetailsSection_" Text="Пожелания к поездке"
+                           FontSize="18" FontAttributes="Bold" TextColor="#21372D"/>
+                    <VerticalStackLayout x:Name="_ActivityGroup_" Spacing="6">
+                        <Label x:Name="_ActivityTitle_" Text="Что хочется включить в программу?"
+                               FontSize="14" FontAttributes="Bold" TextColor="#294337"/>
+                        <Grid x:Name="_ActivitiesGrid_" ColumnDefinitions="Auto,*"
+                              RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="4">
+                            <CheckBox x:Name="_ExcursionsCheck_" Grid.Row="0" Grid.Column="0"
+                                      IsChecked="False" Color="#24846E" CheckedChanged="OnSelectionChanged"/>
+                            <Label x:Name="_ExcursionsText_" Grid.Row="0" Grid.Column="1"
+                                   Text="Экскурсии и музеи" FontSize="14" FontAttributes="None"
+                                   TextColor="#21372D" VerticalOptions="Center"/>
+                            <CheckBox x:Name="_NatureCheck_" Grid.Row="1" Grid.Column="0"
+                                      IsChecked="False" Color="#24846E" CheckedChanged="OnSelectionChanged"/>
+                            <Label x:Name="_NatureText_" Grid.Row="1" Grid.Column="1"
+                                   Text="Прогулки на природе" FontSize="14" FontAttributes="None"
+                                   TextColor="#21372D" VerticalOptions="Center"/>
+                            <CheckBox x:Name="_FoodCheck_" Grid.Row="2" Grid.Column="0"
+                                      IsChecked="False" Color="#24846E" CheckedChanged="OnSelectionChanged"/>
+                            <Label x:Name="_FoodText_" Grid.Row="2" Grid.Column="1"
+                                   Text="Местная кухня" FontSize="14" FontAttributes="None"
+                                   TextColor="#21372D" VerticalOptions="Center"/>
+                            <CheckBox x:Name="_QuietCheck_" Grid.Row="3" Grid.Column="0"
+                                      IsChecked="False" Color="#24846E" CheckedChanged="OnSelectionChanged"/>
+                            <Label x:Name="_QuietText_" Grid.Row="3" Grid.Column="1"
+                                   Text="Время для спокойного отдыха" FontSize="14" FontAttributes="None"
+                                   TextColor="#21372D" VerticalOptions="Center"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                    <Grid x:Name="_TransferGrid_" RowDefinitions="Auto" ColumnDefinitions="Auto,*"
+                          ColumnSpacing="10">
+                        <Switch x:Name="_TransferSwitch_" Grid.Row="0" Grid.Column="0"
+                                IsToggled="False" OnColor="#24846E"
+                                Toggled="OnTransferChanged" VerticalOptions="Center"/>
+                        <Label x:Name="_TransferText_" Grid.Row="0" Grid.Column="1"
+                               Text="Нужен трансфер от вокзала или аэропорта"
+                               FontSize="14" FontAttributes="None" TextColor="#21372D"
+                               VerticalOptions="Center" LineBreakMode="WordWrap"/>
+                    </Grid>
+
+                    <BoxView x:Name="_LineThree_" HeightRequest="1" Color="#E3EAE4"/>
+                    <Label x:Name="_DatesSection_" Text="Даты и детали"
+                           FontSize="18" FontAttributes="Bold" TextColor="#21372D"/>
+                    <VerticalStackLayout x:Name="_DateGroup_" Spacing="6">
+                        <Label x:Name="_DateTitle_" Text="Планируемая дата выезда"
+                               FontSize="14" FontAttributes="Bold" TextColor="#294337"/>
+                        <DatePicker x:Name="_DepartureDate_" Format="dd.MM.yyyy"
+                                    Date="11/14/2026" MinimumDate="01/01/2026" MaximumDate="12/31/2030"
+                                    TextColor="#21372D" BackgroundColor="#F4F7F4"
+                                    FontSize="15" HeightRequest="44"
+                                    DateSelected="OnDepartureChanged"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout x:Name="_DurationGroup_" Spacing="6">
+                        <Label x:Name="_DurationTitle_" Text="Продолжительность"
+                               FontSize="14" FontAttributes="Bold" TextColor="#294337"/>
+                        <Grid x:Name="_DurationGrid_" ColumnDefinitions="*,Auto"
+                              RowDefinitions="Auto" ColumnSpacing="12">
+                            <Stepper x:Name="_DurationStepper_" Grid.Row="0" Grid.Column="1"
+                                     Minimum="1" Maximum="14" Value="4" Increment="1"
+                                     ValueChanged="OnDurationChanged"/>
+                            <Label x:Name="_DaysValue_" Grid.Row="0" Grid.Column="0"
+                                   Text="{Binding Source={x:Reference _DurationStepper_}, Path=Value, Mode=OneWay, StringFormat='Дней: {0:F0}'}"
+                                   FontSize="15" FontAttributes="None" TextColor="#5D7066"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout x:Name="_CommentGroup_" Spacing="6">
+                        <Label x:Name="_CommentTitle_" Text="Дополнительные пожелания"
+                               FontSize="14" FontAttributes="Bold" TextColor="#294337"/>
+                        <Editor x:Name="_CommentEditor_" Placeholder="Например: без ночных переездов, отдельные номера, поездка на автомобиле…"
+                                AutoSize="TextChanges" MaxLength="300" MinimumHeightRequest="95"
+                                FontSize="14" TextColor="#21372D" PlaceholderColor="#8A9A90"
+                                BackgroundColor="#F4F7F4" TextChanged="OnCommentChanged"/>
+                    </VerticalStackLayout>
+                    <Label x:Name="_StatusLabel_" Text="Основные поля заполнены - можно посмотреть план"
+                           FontSize="12" FontAttributes="None" TextColor="#26775E" IsVisible="False"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Grid x:Name="_ActionsGrid_" ColumnDefinitions="*" RowDefinitions="Auto,Auto"
+                  RowSpacing="8">
+                <Button x:Name="_ShowButton_" Grid.Row="0" Grid.Column="0"
+                        Text="Показать результат" Clicked="OnShowPlanClicked" IsEnabled="False"
+                        BackgroundColor="#24846E" TextColor="#FFFFFF" FontSize="15"
+                        CornerRadius="10" HeightRequest="50"/>
+                <Button x:Name="_ResetButton_" Grid.Row="1" Grid.Column="0"
+                        Text="Очистить" Clicked="OnResetClicked"
+                        BackgroundColor="#E7EEEA" TextColor="#294337" FontSize="14"
+                        CornerRadius="10" HeightRequest="46"/>
+            </Grid>
+
+            <Border x:Name="_SummaryCard_" BackgroundColor="#EBF6F0" Stroke="#D1E7DC"
+                    StrokeThickness="1" StrokeShape="RoundRectangle 16" Padding="18"
+                    IsVisible="False">
+                <VerticalStackLayout x:Name="_SummaryGroup_" Spacing="12">
+                    <Label x:Name="_SummaryHeader_" Text="Параметры поездки" FontSize="19"
+                           FontAttributes="Bold" TextColor="#21372D"/>
+                    <Label x:Name="_SummaryContacts_" Text="" FontSize="14"
+                           FontAttributes="None" TextColor="#21372D" LineBreakMode="WordWrap"/>
+                    <BoxView x:Name="_SummaryLine_" HeightRequest="1" Color="#CDE1D5"/>
+                    <Label x:Name="_SummaryBudget_" Text="" FontSize="14"
+                           FontAttributes="None" TextColor="#21372D" LineBreakMode="WordWrap"/>
+                    <Label x:Name="_SummaryActivities_" Text="" FontSize="14"
+                           FontAttributes="None" TextColor="#21372D" LineBreakMode="WordWrap"/>
+                    <Label x:Name="_SummarySchedule_" Text="" FontSize="14"
+                           FontAttributes="None" TextColor="#21372D" LineBreakMode="WordWrap"/>
+                    <Label x:Name="_SummaryComment_" Text="" FontSize="14"
+                           FontAttributes="None" TextColor="#21372D" LineBreakMode="WordWrap"/>
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
